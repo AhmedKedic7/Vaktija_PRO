@@ -34,11 +34,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.vaktijapro.R
 import com.example.vaktijapro.RegistrationViewModel
 import com.example.vaktijapro.ui.theme.VaktijaPROTheme
@@ -67,7 +62,7 @@ fun Register() {
             Image(
                 painter = painterResource(id = R.drawable.moon_star),
                 contentDescription = "",
-                modifier = Modifier.size(width = 100.dp, height = 100.dp)
+                modifier = Modifier.size(width = 101.dp, height = 100.dp)
             )
 
             Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
