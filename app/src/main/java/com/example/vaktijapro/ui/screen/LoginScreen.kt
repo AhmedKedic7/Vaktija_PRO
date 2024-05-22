@@ -10,13 +10,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,14 +30,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vaktijapro.R
 import com.example.vaktijapro.ui.theme.VaktijaPROTheme
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun LoginScreen(){
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var showPassword by remember { mutableStateOf(value = false) }
+
     Surface (modifier = Modifier.fillMaxSize(),
     color = Color(0xDF005930)) {
 
@@ -61,14 +75,11 @@ fun LoginScreen(){
         Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
 
         TextField(
-            value = "",
-            onValueChange = { /* TODO */ },
+            value = email,
+            onValueChange = { email = it },
             enabled = true,
             label = {
-                Text(text = "email")
-            },
-            placeholder = {
-                Text(text = "example@exmaple.com")
+                Text(text = "Email")
             },
             isError = false
         )
@@ -76,10 +87,10 @@ fun LoginScreen(){
         Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
 
         TextField(
-            value = "",
-            onValueChange = { /* TODO */ },
+            value = password,
+            onValueChange = { password = it },
             label = {
-                Text(text = "password")
+                Text(text = "Password")
             },
             isError = false,
             trailingIcon = {
@@ -87,25 +98,27 @@ fun LoginScreen(){
                     painter = painterResource(id = R.drawable.baseline_visibility_off_24),
                     contentDescription = ""
                 )
-            }
+            },
+            visualTransformation =  PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         )
 
         Spacer(modifier = Modifier.size(width = 0.dp, height = 5.dp))
 
         TextButton(
             onClick = { /*TODO*/ },
-            modifier = Modifier.align(Alignment.End)
         ) {
-            Text(text = "Do not have an account")
+            Text(text = "Do not have an account?", color = Color.White)
         }
 
         Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
 
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
             Text(
                 text = "Login",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Light,
+                color = Color(0xDF00502B),
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 0.dp)
             )
         }
