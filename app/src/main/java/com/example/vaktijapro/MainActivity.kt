@@ -85,7 +85,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Display() {
 
-
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color(0xDF005930)// Set the background color here
