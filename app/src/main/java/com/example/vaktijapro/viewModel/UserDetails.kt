@@ -1,6 +1,5 @@
 package com.example.vaktijapro.viewModel
 
-import androidx.room.ColumnInfo
 import com.example.vaktijapro.model.models.User
 
 data class UserDetails(

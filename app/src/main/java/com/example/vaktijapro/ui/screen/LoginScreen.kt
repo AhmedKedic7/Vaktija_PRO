@@ -35,13 +35,17 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vaktijapro.R
 import com.example.vaktijapro.ui.theme.VaktijaPROTheme
+import com.example.vaktijapro.viewModel.AppViewModelProvider
+import com.example.vaktijapro.viewModel.LoginRegistrationViewModel
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun LoginScreen(){
+fun LoginScreen( viewModel: LoginRegistrationViewModel = viewModel(factory = AppViewModelProvider.Factory)
+){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(value = false) }
@@ -76,7 +80,10 @@ fun LoginScreen(){
 
         TextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = {
+                email = it
+                viewModel.updateUiState(viewModel.userUiState.userDetails.copy(email = it))
+            },
             enabled = true,
             label = {
                 Text(text = "Email")
@@ -88,7 +95,8 @@ fun LoginScreen(){
 
         TextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = { password = it
+                            viewModel.updateUiState(viewModel.userUiState.userDetails.copy(password=it))},
             label = {
                 Text(text = "Password")
             },
@@ -126,7 +134,7 @@ fun LoginScreen(){
     }
 }
 
-@Preview( showBackground = false, )
+@Preview( showBackground = false )
 @Composable
 fun LoginScreenPreview(){
     VaktijaPROTheme {

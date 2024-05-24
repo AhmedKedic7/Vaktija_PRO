@@ -1,5 +1,6 @@
 package com.example.vaktijapro.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,12 +38,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
+
 import com.example.vaktijapro.R
 
+
+
+import com.example.vaktijapro.VaktijaApplication
+
 import com.example.vaktijapro.ui.theme.VaktijaPROTheme
+import com.example.vaktijapro.viewModel.AppViewModelProvider
+import com.example.vaktijapro.viewModel.LoginRegistrationViewModel
+import com.example.vaktijapro.viewModel.UserDetails
+import kotlinx.coroutines.launch
 
 @Composable
-fun Register() {
+fun Register(
+    viewModel: LoginRegistrationViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -49,6 +62,7 @@ fun Register() {
     var errorMessage by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(value = false) }
 
+    val coroutineScope = rememberCoroutineScope()
 
     Surface (modifier = Modifier.fillMaxSize(),
         color = Color(0xDF005930)
@@ -80,7 +94,10 @@ fun Register() {
 
             TextField(
                 value = username,
-                onValueChange = { username = it },
+                onValueChange = {
+                    username = it
+                    viewModel.updateUiState(UserDetails(username = username, email = email, password = password))
+                },
                 enabled = true,
                 label = {
                     Text(text = "Username")
@@ -92,7 +109,10 @@ fun Register() {
 
             TextField(
                 value = email,
-                onValueChange = { email = it },
+                onValueChange = {
+                    email = it
+                    viewModel.updateUiState(UserDetails(username = username, email = email, password = password))
+                },
                 enabled = true,
                 label = {
                     Text(text = "Email")
@@ -104,7 +124,10 @@ fun Register() {
 
             TextField(
                 value = password,
-                onValueChange = { password = it },
+                onValueChange = {
+                    password = it
+                    viewModel.updateUiState(UserDetails(username = username, email = email, password = password))
+                },
                 label = { Text(text = "Password") },
                 isError = false,
                 trailingIcon = {
@@ -154,8 +177,19 @@ fun Register() {
 
             Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
 
-            Button(onClick = {
-
+            Button( onClick = {
+                if (password == confirmPassword) {
+                    coroutineScope.launch {
+                        try {
+                            viewModel.register()
+                            errorMessage = "Registration successful!"
+                        } catch (e: Exception) {
+                            errorMessage = e.message.toString()
+                        }
+                    }
+                } else {
+                    errorMessage = "Passwords do not match!"
+                }
             }, colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
                 Text(
                     text = "Register",
@@ -163,6 +197,13 @@ fun Register() {
                     color = Color(0xDF00502B),
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 0.dp)
+                )
+            }
+            if (errorMessage.isNotEmpty()) {
+                Text(
+                    text = errorMessage,
+                    color = Color.Red,
+                    modifier = Modifier.padding(8.dp)
                 )
             }
         }

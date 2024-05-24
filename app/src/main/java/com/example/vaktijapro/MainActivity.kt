@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vaktijapro.ui.screen.City
+import com.example.vaktijapro.ui.screen.LoginScreen
 import com.example.vaktijapro.ui.screen.Prayers
 import com.example.vaktijapro.ui.screen.Register
 import com.example.vaktijapro.ui.theme.VaktijaPROTheme
@@ -73,7 +74,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     //Display();
-                    Register()
+                    //Register()
+                    LoginScreen()
                     //Prayers();
                     //ListOfLocations(cities = cities)
                 }
