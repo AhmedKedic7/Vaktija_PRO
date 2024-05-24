@@ -1,4 +1,4 @@
-package com.example.vaktijapro
+package com.example.vaktijapro.viewModel
 
 import androidx.lifecycle.ViewModel
 import com.example.vaktijapro.model.daos.UserDao

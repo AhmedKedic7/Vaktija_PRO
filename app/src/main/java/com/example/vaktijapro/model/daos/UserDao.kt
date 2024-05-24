@@ -17,6 +17,13 @@ interface UserDao {
     suspend fun update(user: User)
     @Delete
     suspend fun delete(user: User)
+
+    @Query("SELECT * FROM users WHERE id = :id")
+    fun getUser(id: Int): Flow<User>
+
+    @Query("SELECT * FROM users WHERE email = :email")
+    fun getUserEmail(email: String): Flow<User>
+
     @Query("SELECT * FROM users ORDER BY username ASC")
     fun getUsersOrderedByUsername(): Flow<List<User>>
     @Query("SELECT * FROM users ORDER BY email ASC")
