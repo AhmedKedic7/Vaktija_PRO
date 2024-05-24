@@ -1,6 +1,5 @@
 package com.example.vaktijapro.ui.screen
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,17 +35,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+
 import com.example.vaktijapro.R
-import com.example.vaktijapro.VaktijaApplication
+
 import com.example.vaktijapro.ui.theme.VaktijaPROTheme
-import com.example.vaktijapro.viewModel.AppViewModelProvider
-import com.example.vaktijapro.viewModel.LoginRegistrationViewModel
-import kotlinx.coroutines.launch
 
 @Composable
-fun Register(
-    viewModel: LoginRegistrationViewModel = viewModel(factory = AppViewModelProvider.Factory)
-) {
+fun Register() {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -55,7 +49,6 @@ fun Register(
     var errorMessage by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(value = false) }
 
-    val coroutineScope = rememberCoroutineScope()
 
     Surface (modifier = Modifier.fillMaxSize(),
         color = Color(0xDF005930)
@@ -162,12 +155,7 @@ fun Register(
             Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
 
             Button(onClick = {
-                    coroutineScope.launch {
-                        Log.d("pre login", viewModel.userUiState.toString())
-                        if(viewModel.register()){
-                            Log.d("login", viewModel.userUiState.toString())
-                        }
-                    }
+
             }, colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
                 Text(
                     text = "Register",

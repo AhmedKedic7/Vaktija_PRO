@@ -72,8 +72,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Display();
-                    //Register()
+                    //Display();
+                    Register()
                     //Prayers();
                     //ListOfLocations(cities = cities)
                 }
@@ -124,6 +124,6 @@ fun Display() {
 @Composable
 fun DisplayPreview() {
     VaktijaPROTheme {
-        Display()
+        Register()
     }
 }
