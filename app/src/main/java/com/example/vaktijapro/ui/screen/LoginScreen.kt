@@ -49,6 +49,7 @@ fun LoginScreen( viewModel: LoginRegistrationViewModel = viewModel(factory = App
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(value = false) }
+    var loginMessage by remember { mutableStateOf("") }
 
     Surface (modifier = Modifier.fillMaxSize(),
     color = Color(0xDF005930)) {
@@ -121,13 +122,22 @@ fun LoginScreen( viewModel: LoginRegistrationViewModel = viewModel(factory = App
 
         Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
 
-        Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
+        Button(onClick = {
+                         viewModel.login(email,password, onSuccess = {loginMessage= "Login Succesful!"},
+                             onFailure = {loginMessage="Login failed. Check the creditentials!"})
+                         }, colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
             Text(
                 text = "Login",
                 fontSize = 20.sp,
                 color = Color(0xDF00502B),
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 0.dp)
+            )
+        }
+        if(loginMessage.isNotEmpty()){
+            Text(text = loginMessage,
+                color = if(loginMessage=="Login Succesful!") Color.White else Color.Red,
+                modifier = Modifier.padding(8.dp)
             )
         }
     }

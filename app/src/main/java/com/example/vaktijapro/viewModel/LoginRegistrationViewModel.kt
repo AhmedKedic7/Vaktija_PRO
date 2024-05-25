@@ -21,6 +21,17 @@ class LoginRegistrationViewModel(private val userRepository: UserRepository) : V
             }
         }
     }
+    fun login(email:String,password: String, onSuccess:()->Unit, onFailure:()->Unit){
+        viewModelScope.launch{
+            val user = userRepository.getUserEmail(email).first()
+            if(user!=null && user.password == password){
+                onSuccess()
+            }else{
+                onFailure()
+            }
+        }
+
+    }
 
     private suspend fun validateInput(): Boolean {
         return with(userUiState.userDetails) {

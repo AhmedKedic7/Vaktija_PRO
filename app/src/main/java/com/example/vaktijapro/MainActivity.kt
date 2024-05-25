@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.vaktijapro.ui.screen.AyatScreen
 import com.example.vaktijapro.ui.screen.City
 import com.example.vaktijapro.ui.screen.LoginScreen
 import com.example.vaktijapro.ui.screen.Prayers
@@ -75,7 +76,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     //Display();
                     //Register()
-                    LoginScreen()
+                    //LoginScreen()
+                    AyatScreen()
                     //Prayers();
                     //ListOfLocations(cities = cities)
                 }
@@ -126,6 +128,6 @@ fun Display() {
 @Composable
 fun DisplayPreview() {
     VaktijaPROTheme {
-        Register()
+        //AyatScreen()
     }
 }

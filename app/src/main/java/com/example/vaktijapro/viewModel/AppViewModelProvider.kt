@@ -14,6 +14,13 @@ object AppViewModelProvider {
             )
         }
     }
+    val ayatFactory = viewModelFactory {
+        initializer {
+            AyatViewModel(
+                userApplication().container.ayatRepository
+            )
+        }
+    }
 }
 
 fun CreationExtras.userApplication(): VaktijaApplication = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]) as VaktijaApplication
