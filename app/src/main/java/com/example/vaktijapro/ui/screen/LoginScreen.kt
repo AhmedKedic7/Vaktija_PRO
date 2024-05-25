@@ -35,16 +35,21 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vaktijapro.R
 import com.example.vaktijapro.ui.theme.VaktijaPROTheme
+import com.example.vaktijapro.viewModel.AppViewModelProvider
+import com.example.vaktijapro.viewModel.LoginRegistrationViewModel
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun LoginScreen(){
+fun LoginScreen( viewModel: LoginRegistrationViewModel = viewModel(factory = AppViewModelProvider.Factory)
+){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(value = false) }
+    var loginMessage by remember { mutableStateOf("") }
 
     Surface (modifier = Modifier.fillMaxSize(),
     color = Color(0xDF005930)) {
@@ -76,7 +81,10 @@ fun LoginScreen(){
 
         TextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = {
+                email = it
+                viewModel.updateUiState(viewModel.userUiState.userDetails.copy(email = it))
+            },
             enabled = true,
             label = {
                 Text(text = "Email")
@@ -88,7 +96,8 @@ fun LoginScreen(){
 
         TextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = { password = it
+                            viewModel.updateUiState(viewModel.userUiState.userDetails.copy(password=it))},
             label = {
                 Text(text = "Password")
             },
@@ -113,7 +122,10 @@ fun LoginScreen(){
 
         Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
 
-        Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
+        Button(onClick = {
+                         viewModel.login(email,password, onSuccess = {loginMessage= "Login Succesful!"},
+                             onFailure = {loginMessage="Login failed. Check the creditentials!"})
+                         }, colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
             Text(
                 text = "Login",
                 fontSize = 20.sp,
@@ -122,11 +134,17 @@ fun LoginScreen(){
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 0.dp)
             )
         }
+        if(loginMessage.isNotEmpty()){
+            Text(text = loginMessage,
+                color = if(loginMessage=="Login Succesful!") Color.White else Color.Red,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
     }
     }
 }
 
-@Preview( showBackground = false, )
+@Preview( showBackground = false )
 @Composable
 fun LoginScreenPreview(){
     VaktijaPROTheme {

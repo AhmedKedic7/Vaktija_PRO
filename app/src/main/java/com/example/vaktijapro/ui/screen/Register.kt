@@ -37,11 +37,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+
+
 import com.example.vaktijapro.R
+
+
+
 import com.example.vaktijapro.VaktijaApplication
+
 import com.example.vaktijapro.ui.theme.VaktijaPROTheme
 import com.example.vaktijapro.viewModel.AppViewModelProvider
 import com.example.vaktijapro.viewModel.LoginRegistrationViewModel
+import com.example.vaktijapro.viewModel.UserDetails
 import kotlinx.coroutines.launch
 
 @Composable
@@ -87,7 +94,10 @@ fun Register(
 
             TextField(
                 value = username,
-                onValueChange = { username = it },
+                onValueChange = {
+                    username = it
+                    viewModel.updateUiState(UserDetails(username = username, email = email, password = password))
+                },
                 enabled = true,
                 label = {
                     Text(text = "Username")
@@ -99,7 +109,10 @@ fun Register(
 
             TextField(
                 value = email,
-                onValueChange = { email = it },
+                onValueChange = {
+                    email = it
+                    viewModel.updateUiState(UserDetails(username = username, email = email, password = password))
+                },
                 enabled = true,
                 label = {
                     Text(text = "Email")
@@ -111,7 +124,10 @@ fun Register(
 
             TextField(
                 value = password,
-                onValueChange = { password = it },
+                onValueChange = {
+                    password = it
+                    viewModel.updateUiState(UserDetails(username = username, email = email, password = password))
+                },
                 label = { Text(text = "Password") },
                 isError = false,
                 trailingIcon = {
@@ -161,13 +177,19 @@ fun Register(
 
             Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
 
-            Button(onClick = {
+            Button( onClick = {
+                if (password == confirmPassword) {
                     coroutineScope.launch {
-                        Log.d("pre login", viewModel.userUiState.toString())
-                        if(viewModel.register()){
-                            Log.d("login", viewModel.userUiState.toString())
+                        try {
+                            viewModel.register()
+                            errorMessage = "Registration successful!"
+                        } catch (e: Exception) {
+                            errorMessage = e.message.toString()
                         }
                     }
+                } else {
+                    errorMessage = "Passwords do not match!"
+                }
             }, colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
                 Text(
                     text = "Register",
@@ -175,6 +197,13 @@ fun Register(
                     color = Color(0xDF00502B),
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 0.dp)
+                )
+            }
+            if (errorMessage.isNotEmpty()) {
+                Text(
+                    text = errorMessage,
+                    color = Color.Red,
+                    modifier = Modifier.padding(8.dp)
                 )
             }
         }
