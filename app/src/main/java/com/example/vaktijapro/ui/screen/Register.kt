@@ -44,6 +44,7 @@ import com.example.vaktijapro.R
 
 
 import com.example.vaktijapro.VaktijaApplication
+import com.example.vaktijapro.ui.screen.navigation.NavigationDestination
 
 import com.example.vaktijapro.ui.theme.VaktijaPROTheme
 import com.example.vaktijapro.viewModel.AppViewModelProvider
@@ -51,9 +52,14 @@ import com.example.vaktijapro.viewModel.LoginRegistrationViewModel
 import com.example.vaktijapro.viewModel.UserDetails
 import kotlinx.coroutines.launch
 
+object RegistrationDestination: NavigationDestination {
+    override val route: String = "register"
+    override val title: String = "Register"
+}
 @Composable
 fun Register(
-    viewModel: LoginRegistrationViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: LoginRegistrationViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    navigateToLogin: () -> Unit
 ) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -170,7 +176,7 @@ fun Register(
 
 
             TextButton(
-                onClick = { /*TODO*/ },
+                onClick = { navigateToLogin() },
             ) {
                 Text(text = "Already have an account?", color = Color.White)
             }
@@ -214,6 +220,6 @@ fun Register(
 @Composable
 fun RegisterPreview(){
     VaktijaPROTheme {
-        Register()
+        //Register()
     }
 }

@@ -25,11 +25,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import com.example.vaktijapro.ui.screen.AyatScreen
 import com.example.vaktijapro.ui.screen.City
 import com.example.vaktijapro.ui.screen.LoginScreen
 import com.example.vaktijapro.ui.screen.Prayers
 import com.example.vaktijapro.ui.screen.Register
+import com.example.vaktijapro.ui.screen.Display
+import com.example.vaktijapro.ui.screen.navigation.AppNavHost
 import com.example.vaktijapro.ui.theme.VaktijaPROTheme
 
 class MainActivity : ComponentActivity() {
@@ -74,60 +77,18 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    //Display();
+                     //Display();
                     //Register()
                     //LoginScreen()
-                    AyatScreen()
+                    //AyatScreen()
                     //Prayers();
                     //ListOfLocations(cities = cities)
+                    AppNavHost(navController = rememberNavController())
                 }
             }
         }
     }
 }
 
-@Composable
-fun Display() {
-
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = Color(0xDF005930)// Set the background color here
-    ) {
-
-            Column(modifier = Modifier.fillMaxSize()) {
-
-                Spacer(modifier = Modifier.height(200.dp))
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(100.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.moon_star),
-                        contentDescription = "Logo",
-                    )
-                    Text(
-                        text = "VaktijaPRO",
-                        style = TextStyle(
-                            color = Color.White, // Set text color to contrast with background
-                            fontSize = 30.sp,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
-                        )
-                    )
-                }
-            }
-
-    }
-}
 
 
-@Preview(showBackground = true)
-@Composable
-fun DisplayPreview() {
-    VaktijaPROTheme {
-        //AyatScreen()
-    }
-}

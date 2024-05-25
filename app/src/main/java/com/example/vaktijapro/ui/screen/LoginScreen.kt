@@ -37,14 +37,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vaktijapro.R
+import com.example.vaktijapro.ui.screen.navigation.NavigationDestination
 import com.example.vaktijapro.ui.theme.VaktijaPROTheme
 import com.example.vaktijapro.viewModel.AppViewModelProvider
 import com.example.vaktijapro.viewModel.LoginRegistrationViewModel
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
+object LoginDestination: NavigationDestination {
+    override val route = "login"
+    override val title = "Login"
+}
+
 @Composable
-fun LoginScreen( viewModel: LoginRegistrationViewModel = viewModel(factory = AppViewModelProvider.Factory)
+fun LoginScreen(
+    viewModel: LoginRegistrationViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    navigateToRegister: () -> Unit,
+    navigateToAyatScreen: () -> Unit
 ){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -115,7 +124,7 @@ fun LoginScreen( viewModel: LoginRegistrationViewModel = viewModel(factory = App
         Spacer(modifier = Modifier.size(width = 0.dp, height = 5.dp))
 
         TextButton(
-            onClick = { /*TODO*/ },
+            onClick = { navigateToRegister() }
         ) {
             Text(text = "Do not have an account?", color = Color.White)
         }
@@ -123,8 +132,8 @@ fun LoginScreen( viewModel: LoginRegistrationViewModel = viewModel(factory = App
         Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
 
         Button(onClick = {
-                         viewModel.login(email,password, onSuccess = {loginMessage= "Login Succesful!"},
-                             onFailure = {loginMessage="Login failed. Check the creditentials!"})
+                         viewModel.login(email,password, onSuccess = { navigateToAyatScreen() },
+                             onFailure = { loginMessage="Login failed. Check the credentials!" })
                          }, colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
             Text(
                 text = "Login",
@@ -136,7 +145,7 @@ fun LoginScreen( viewModel: LoginRegistrationViewModel = viewModel(factory = App
         }
         if(loginMessage.isNotEmpty()){
             Text(text = loginMessage,
-                color = if(loginMessage=="Login Succesful!") Color.White else Color.Red,
+                color = if(loginMessage == "Login Successful!") Color.White else Color.Red,
                 modifier = Modifier.padding(8.dp)
             )
         }
@@ -148,6 +157,6 @@ fun LoginScreen( viewModel: LoginRegistrationViewModel = viewModel(factory = App
 @Composable
 fun LoginScreenPreview(){
     VaktijaPROTheme {
-        LoginScreen()
+        //LoginScreen()
     }
 }
