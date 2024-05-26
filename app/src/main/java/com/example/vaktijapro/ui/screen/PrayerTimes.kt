@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vaktijapro.R
+import com.example.vaktijapro.ui.screen.navigation.NavigationDestination
 import com.example.vaktijapro.ui.theme.VaktijaPROTheme
 import kotlinx.coroutines.delay
 import java.lang.String.format
@@ -58,12 +59,19 @@ val MAGHRIB = "20:15"
 val ISHA = "22:07"
 
 
-
+object PrayersDestination: NavigationDestination {
+    override val route: String = "prayers"
+    override val title: String = "Prayers"
+}
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Prayers()  {
+fun Prayers(
+    navigateToCities: () -> Unit,
+    navigateToAyatScreen: () -> Unit
+)  {
     val CURRENT_PRAYER = remember { mutableStateOf("") }
+    var expanded = false
 
     Surface(
         modifier = Modifier
@@ -80,6 +88,18 @@ fun Prayers()  {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
+                Button(
+                    onClick = { navigateToAyatScreen() },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.left_arrow),
+                        contentDescription = "left arrow",
+                        modifier = Modifier.size(20.dp),
+                        tint = Color.Gray
+                    )
+                }
+
                 Text(
                     modifier = Modifier.padding(32.dp, 0.dp),
                     fontSize = 20.sp,
@@ -87,7 +107,7 @@ fun Prayers()  {
                     color = Color.Gray
                 )
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { navigateToCities() },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.White)
                 ) {
                     Icon(
@@ -207,6 +227,6 @@ fun PrayerCard(time: String, prayerName: String) {
 @Composable
 fun PrayersPreview(){
     VaktijaPROTheme {
-        Prayers();
+        Prayers(navigateToCities = { }, navigateToAyatScreen = { } );
     }
 }

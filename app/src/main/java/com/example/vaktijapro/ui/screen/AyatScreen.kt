@@ -16,6 +16,8 @@ import com.example.vaktijapro.viewModel.AppViewModelProvider
 import com.example.vaktijapro.viewModel.AyatViewModel
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -26,9 +28,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vaktijapro.R
 import com.example.vaktijapro.model.models.Ayat
+import com.example.vaktijapro.ui.screen.navigation.NavigationDestination
+
+
+object AyatScreenDestination: NavigationDestination {
+    override val route: String = "ayat_screen"
+    override val title: String = "Ayat Screen"
+}
 
 @Composable
-fun AyatScreen(viewModel: AyatViewModel= viewModel(factory=AppViewModelProvider.ayatFactory)){
+fun AyatScreen(
+    viewModel: AyatViewModel= viewModel(factory=AppViewModelProvider.ayatFactory),
+    navigateToAyatScreen: () -> Unit,
+    navigateToPrayers: () -> Unit
+){
 
 
     // Collect the random Ayat from the ViewModel
@@ -69,6 +82,22 @@ fun AyatScreen(viewModel: AyatViewModel= viewModel(factory=AppViewModelProvider.
                 color = Color.White,
                 modifier = Modifier.padding(16.dp)
             )
+            
+            Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
+            
+            TextButton(
+                onClick = { navigateToAyatScreen() },
+            ) {
+                Text(text = "Generate new Ayat", color = Color.White)
+            }
+
+            Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
+
+            TextButton(
+                onClick = { navigateToPrayers() },
+            ) {
+                Text(text = "See Prayer Times", color = Color.White)
+            }
         }
     }
 }
@@ -78,6 +107,6 @@ fun AyatScreen(viewModel: AyatViewModel= viewModel(factory=AppViewModelProvider.
 @Composable
 fun AyatScreenPreview(){
     VaktijaPROTheme {
-        AyatScreen()
+        //AyatScreen()
     }
 }

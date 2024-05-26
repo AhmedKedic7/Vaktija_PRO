@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vaktijapro.R
+import com.example.vaktijapro.ui.screen.navigation.NavigationDestination
 import com.example.vaktijapro.ui.theme.VaktijaPROTheme
 
 data class City(val name:String);
@@ -72,8 +73,15 @@ val cities = listOf<City>(
 
 val backgroundColor = 0xFFE4E4E4;
 
+object ListOfCities: NavigationDestination {
+    override val route: String = "cities"
+    override val title: String = "Cities"
+}
+
 @Composable
-fun ListOfLocations(cities:List<City>)  {
+fun ListOfLocations(
+    navigateToPrayers: () -> Unit
+)  {
     var selectedCity by remember { mutableStateOf<String?>(null) }
 
     Surface(
@@ -90,7 +98,7 @@ fun ListOfLocations(cities:List<City>)  {
                 Column {
                     Spacer(modifier = Modifier.size(width = 0.dp, height = 4.5.dp))
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = { navigateToPrayers() },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(backgroundColor))
                     ) {
                         Icon(
@@ -142,6 +150,6 @@ fun ListOfLocations(cities:List<City>)  {
 @Composable
 fun ListOfLocationsPreview(){
     VaktijaPROTheme {
-        ListOfLocations(cities)
+        //ListOfLocations()
     }
 }
