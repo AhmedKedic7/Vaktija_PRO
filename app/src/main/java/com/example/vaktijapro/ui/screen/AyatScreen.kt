@@ -1,5 +1,6 @@
 package com.example.vaktijapro.ui.screen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,8 @@ import com.example.vaktijapro.viewModel.AyatViewModel
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.example.vaktijapro.R
 import com.example.vaktijapro.model.models.Ayat
 import com.example.vaktijapro.ui.screen.navigation.NavigationDestination
+import com.example.vaktijapro.ui.screen.navigation.StudentAppBar
 
 
 object AyatScreenDestination: NavigationDestination {
@@ -36,12 +40,16 @@ object AyatScreenDestination: NavigationDestination {
     override val title: String = "Ayat Screen"
 }
 
+
 @Composable
 fun AyatScreen(
     viewModel: AyatViewModel= viewModel(factory=AppViewModelProvider.ayatFactory),
     navigateToAyatScreen: () -> Unit,
-    navigateToPrayers: () -> Unit
+    navigateToPrayers: () -> Unit,
+    navigateToTutorial: () ->Unit
 ){
+
+
 
 
     // Collect the random Ayat from the ViewModel
@@ -58,23 +66,25 @@ fun AyatScreen(
             Image(
                 painter = painterResource(id = R.drawable.moon_star),
                 contentDescription = "Logo",
+                modifier = Modifier.size(100.dp)
             )
             ayat?.let { ayat ->
                 Text(
+                    text = ayat.ayat_info,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier.padding(16.dp)
+                )
+                Text(
                     text = ayat.ayat,
                     fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
                     color = Color.White,
                     modifier = Modifier.padding(24.dp),
 
                     textAlign= TextAlign.End
                 )
-                Text(
-                    text = ayat.ayat_info,
-                    fontSize = 24.sp,
-                    color = Color.White,
-                    modifier = Modifier.padding(16.dp)
-                )
+
             } ?: Text(
                 text = "Loading...",
                 fontSize = 24.sp,
@@ -85,18 +95,41 @@ fun AyatScreen(
             
             Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
             
-            TextButton(
+            Button(
                 onClick = { navigateToAyatScreen() },
-            ) {
-                Text(text = "Generate new Ayat", color = Color.White)
+                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                modifier = Modifier.width(300.dp)) {
+                Text(text = "Generate new Ayat",
+                    fontSize = 20.sp,
+                    color = Color(0xDF00502B),
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 0.dp))
             }
 
             Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
 
-            TextButton(
+            Button(
                 onClick = { navigateToPrayers() },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                modifier = Modifier.width(300.dp)
             ) {
-                Text(text = "See Prayer Times", color = Color.White)
+                Text(text = "See Prayer Times",
+                    fontSize = 20.sp,
+                    color = Color(0xDF00502B),
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 0.dp))
+            }
+            Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
+            Button(
+                onClick = { navigateToTutorial() },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                modifier = Modifier.width(300.dp)
+            ) {
+                Text(text = "Log Prayers",
+                    fontSize = 20.sp,
+                    color = Color(0xDF00502B),
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 0.dp))
             }
         }
     }

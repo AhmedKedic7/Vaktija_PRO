@@ -21,6 +21,13 @@ object AppViewModelProvider {
             )
         }
     }
+    val prayerFactory= viewModelFactory {
+        initializer {
+            PrayerViewModel(
+                userApplication().container.prayerRepository
+            )
+        }
+    }
 }
 
 fun CreationExtras.userApplication(): VaktijaApplication = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]) as VaktijaApplication

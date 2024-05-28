@@ -188,7 +188,7 @@ fun Register(
                     coroutineScope.launch {
                         try {
                             viewModel.register()
-                            errorMessage = "Registration successful!"
+                            errorMessage= "Registration successful!"
                         } catch (e: Exception) {
                             errorMessage = e.message.toString()
                         }
@@ -208,7 +208,7 @@ fun Register(
             if (errorMessage.isNotEmpty()) {
                 Text(
                     text = errorMessage,
-                    color = Color.Red,
+                    color = Color.White,
                     modifier = Modifier.padding(8.dp)
                 )
             }
