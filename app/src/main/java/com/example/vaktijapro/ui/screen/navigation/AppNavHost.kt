@@ -6,8 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.vaktijapro.ui.screen.AyatScreen
 import com.example.vaktijapro.ui.screen.AyatScreenDestination
+
+import com.example.vaktijapro.ui.screen.PrayerLog
 import com.example.vaktijapro.ui.screen.ListOfCities
 import com.example.vaktijapro.ui.screen.ListOfLocations
 import com.example.vaktijapro.ui.screen.LoginDestination
@@ -16,6 +19,7 @@ import com.example.vaktijapro.ui.screen.Prayers
 import com.example.vaktijapro.ui.screen.PrayersDestination
 import com.example.vaktijapro.ui.screen.Register
 import com.example.vaktijapro.ui.screen.RegistrationDestination
+import com.example.vaktijapro.ui.screen.TutorialDestination
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -52,7 +56,28 @@ fun AppNavHost(
         composable(route = AyatScreenDestination.route){
             AyatScreen(
                 navigateToAyatScreen = { navController.navigate("${AyatScreenDestination.route}") },
-                navigateToPrayers = { navController.navigate("${PrayersDestination.route}") }
+                navigateToPrayers = { navController.navigate("${PrayersDestination.route}") },
+                navigateToTutorial = { navController.navigate("${TutorialDestination.route}")} ,
+
+
+
+            )
+
+
+
+
+        }
+        /*composable(
+            route = AyatScreenDestination.route,
+            )
+         {
+            AyatScreenWithTopBar(navigateBack = { navController.navigateUp() } )
+        }*/
+
+        composable(route =TutorialDestination.route){
+            PrayerLog(
+                navigateToAyatScreen = { navController.navigate("${AyatScreenDestination.route}") },
+                navigateToTutorial = { navController.navigate("${TutorialDestination.route}")}
             )
         }
     }

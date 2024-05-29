@@ -3,6 +3,7 @@ package com.example.vaktijapro.ui.screen
 import android.annotation.SuppressLint
 import android.icu.text.SimpleDateFormat
 import android.os.Build
+import android.text.style.ClickableSpan
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -195,7 +196,10 @@ fun CurrentTime(time:String) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PrayerCard(time: String, prayerName: String) {
-    Column(modifier = Modifier.padding(10.dp, 0.dp)) {
+
+    Column(
+
+        modifier = Modifier.padding(10.dp, 0.dp)) {
         Row(
             modifier = Modifier
                 .shadow(elevation = 4.dp)
@@ -216,9 +220,13 @@ fun PrayerCard(time: String, prayerName: String) {
                 CurrentTime(time)
                 Spacer(modifier = Modifier.size(width = 0.dp, height = 16.dp))
             }
+            Spacer(modifier = Modifier.size(width = 32.dp, height = 0.dp))
+
         }
+        }
+
         Spacer(modifier = Modifier.size(width = 0.dp, height = 8.dp))
-    }
+
 }
 
 
