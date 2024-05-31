@@ -15,12 +15,12 @@ import com.example.vaktijapro.model.models.User
 
 @Database(
     entities = [User::class, Ayat::class,Prayer::class], // Include the new entity Ayat
-    version = 5, // Increase the version number
+    version = 7, // Increase the version number
     exportSchema = false
 )
 abstract class VaktijaDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
-    abstract fun ayatDao(): AyatDao // Add abstract function for AyatDao
+    abstract fun ayatDao(): AyatDao
     abstract fun prayerDao(): PrayerDao
 
     companion object {
@@ -33,13 +33,13 @@ abstract class VaktijaDatabase : RoomDatabase() {
                     context.applicationContext, VaktijaDatabase::class.java,
                     "VaktijaAPPDatabase"
                 )
-                    //.addMigrations(MIGRATION_3_5) // Add migration from version 1 to version 2
+                    .addMigrations(MIGRATION_6_7) // Add migration from version 1 to version 2
                     .build().also { Instance = it }
             }
         }
 
         // Define your migration here
-        private val MIGRATION_3_5 = object : Migration(3, 5) {
+        private val MIGRATION_6_7 = object : Migration(6, 7) {
             override fun migrate(database: SupportSQLiteDatabase) {
 
                 database.execSQL("ALTER TABLE prayers RENAME TO prayers_old")
@@ -48,9 +48,10 @@ abstract class VaktijaDatabase : RoomDatabase() {
                 database.execSQL("""
                     CREATE TABLE IF NOT EXISTS prayers (
                 prayer_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                prayer_name TEXT NOT NULL,
-                prayer_time TEXT NOT NULL,
-                is_completed INTEGER NOT NULL DEFAULT 0
+                prayer TEXT NOT NULL,
+                user_id INTEGER,
+                timestamp INTEGER NOT NULL,
+                FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
                         
                     )
                 """.trimIndent())

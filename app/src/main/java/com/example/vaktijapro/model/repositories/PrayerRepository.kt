@@ -8,14 +8,11 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 
 class PrayerRepository (private val prayerDao :PrayerDao){
-    suspend fun insertPrayer(prayer: String) {
-        val prayer = Prayer(prayer = prayer)
-        prayerDao.insert(prayer)
+    suspend fun insertPrayer(prayer: Prayer) {
+        prayerDao.insertPrayer(prayer)
     }
-    fun getLastFivePrayers(): Flow<List<Prayer>> = flow {
-        val lastFivePrayers = withContext(Dispatchers.IO) {
-            prayerDao.getLastFivePrayers()
-        }
-        emit(lastFivePrayers)
+
+    fun getLastFivePrayers(userId: Int): Flow<List<Prayer>> {
+        return prayerDao.getLastFivePrayers(userId)
     }
 }
