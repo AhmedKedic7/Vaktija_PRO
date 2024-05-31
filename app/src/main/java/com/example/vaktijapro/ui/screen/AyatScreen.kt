@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.example.vaktijapro.R
 import com.example.vaktijapro.model.models.Ayat
 import com.example.vaktijapro.ui.screen.navigation.NavigationDestination
-import com.example.vaktijapro.ui.screen.navigation.StudentAppBar
+
 
 
 object AyatScreenDestination: NavigationDestination {
@@ -43,10 +43,11 @@ object AyatScreenDestination: NavigationDestination {
 
 @Composable
 fun AyatScreen(
+    userId:Int,
     viewModel: AyatViewModel= viewModel(factory=AppViewModelProvider.ayatFactory),
     navigateToAyatScreen: () -> Unit,
     navigateToPrayers: () -> Unit,
-    navigateToTutorial: () ->Unit
+    navigateToTutorial: (Int) -> Unit
 ){
 
 
@@ -121,7 +122,7 @@ fun AyatScreen(
             }
             Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
             Button(
-                onClick = { navigateToTutorial() },
+                onClick = { navigateToTutorial(userId) },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 modifier = Modifier.width(300.dp)
             ) {

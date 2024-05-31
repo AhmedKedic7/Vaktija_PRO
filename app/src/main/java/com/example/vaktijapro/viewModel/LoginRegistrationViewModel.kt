@@ -3,6 +3,8 @@ package com.example.vaktijapro.viewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vaktijapro.model.models.User
@@ -14,6 +16,9 @@ class LoginRegistrationViewModel(private val userRepository: UserRepository) : V
     var userUiState by mutableStateOf(UserUiState())
         private set
 
+    private val _userId = MutableLiveData<Int>()
+    val userId: LiveData<Int> get() = _userId
+
     fun register() {
         viewModelScope.launch {
             if (validateInput()) {
@@ -21,12 +26,13 @@ class LoginRegistrationViewModel(private val userRepository: UserRepository) : V
             }
         }
     }
-    fun login(email:String,password: String, onSuccess:()->Unit, onFailure:()->Unit){
+    fun login(email:String,password: String, onSuccess:(Int)->Unit, onFailure:()->Unit){
         viewModelScope.launch{
             val user = userRepository.getUserEmail(email).first()
-            if(user!=null && user.password == password){
-                onSuccess()
-            }else{
+            if (user != null && user.password == password) {
+                _userId.value = user.id
+                onSuccess(user.id)
+            } else {
                 onFailure()
             }
         }

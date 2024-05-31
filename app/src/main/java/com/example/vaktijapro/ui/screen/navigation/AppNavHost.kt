@@ -37,7 +37,9 @@ fun AppNavHost(
         composable(route = LoginDestination.route){
             LoginScreen(
                 navigateToRegister ={ navController.navigate("${RegistrationDestination.route}") },
-                navigateToAyatScreen = { navController.navigate("${AyatScreenDestination.route}") },
+                navigateToAyatScreen = { userId ->
+                    navController.navigate("${AyatScreenDestination.route}/$userId")
+                 },
             )
         }
         composable(route = ListOfCities.route){
@@ -53,32 +55,33 @@ fun AppNavHost(
             )
         }
 
-        composable(route = AyatScreenDestination.route){
-            AyatScreen(
-                navigateToAyatScreen = { navController.navigate("${AyatScreenDestination.route}") },
-                navigateToPrayers = { navController.navigate("${PrayersDestination.route}") },
-                navigateToTutorial = { navController.navigate("${TutorialDestination.route}")} ,
+        composable("${AyatScreenDestination.route}/{userId}") { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId")?.toIntOrNull()
+            userId?.let {
+                AyatScreen(
+                    userId = it,
+                    navigateToAyatScreen = { navController.navigate("${AyatScreenDestination.route}") },
+                    navigateToPrayers = { navController.navigate("${PrayersDestination.route}") },
+                    navigateToTutorial = { navController.navigate("${TutorialDestination.route}/$it") },
 
 
-
-            )
-
+                    )
 
 
+            }
 
         }
-        /*composable(
-            route = AyatScreenDestination.route,
-            )
-         {
-            AyatScreenWithTopBar(navigateBack = { navController.navigateUp() } )
-        }*/
 
-        composable(route =TutorialDestination.route){
-            PrayerLog(
-                navigateToAyatScreen = { navController.navigate("${AyatScreenDestination.route}") },
-                navigateToTutorial = { navController.navigate("${TutorialDestination.route}")}
+
+            composable("${TutorialDestination.route}/{userId}") { backStackEntry ->
+                val userId = backStackEntry.arguments?.getString("userId")?.toIntOrNull()
+                userId?.let {
+                    PrayerLog(
+                        userId = it,
+                navigateToAyatScreen = { navController.navigate("${AyatScreenDestination.route}/$it") },
+                navigateToTutorial = { navController.navigate("${TutorialDestination.route}/$it")}
             )
         }
     }
+}
 }

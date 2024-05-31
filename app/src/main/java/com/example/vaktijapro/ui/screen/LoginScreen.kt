@@ -55,7 +55,7 @@ object LoginDestination: NavigationDestination {
 fun LoginScreen(
     viewModel: LoginRegistrationViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navigateToRegister: () -> Unit,
-    navigateToAyatScreen: () -> Unit
+    navigateToAyatScreen: (Int) -> Unit
 ){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -136,7 +136,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
 
         Button(onClick = {
-                         viewModel.login(email,password, onSuccess = { navigateToAyatScreen() },
+                         viewModel.login(email,password, onSuccess = { userId -> navigateToAyatScreen(userId) },
                              onFailure = { loginMessage="Login failed. Check the credentials!" })
                          }, colors = ButtonDefaults.buttonColors(containerColor = Color.White)) {
             Text(
