@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import com.example.vaktijapro.ui.screen.AyatScreen
-import com.example.vaktijapro.ui.screen.City
+
 import com.example.vaktijapro.ui.screen.LoginScreen
 import com.example.vaktijapro.ui.screen.Prayers
 import com.example.vaktijapro.ui.screen.Register
@@ -36,7 +36,7 @@ import com.example.vaktijapro.ui.screen.navigation.AppNavHost
 import com.example.vaktijapro.ui.theme.VaktijaPROTheme
 
 class MainActivity : ComponentActivity() {
-    val cities = listOf<City>(
+    /*val cities = listOf<City>(
         City("Sarajevo"),
         City("Banja Luka"),
         City("Bihać"),
@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
         City("Konjic"),
         City("Visoko"),
         City("Kakanj"),
-    )
+    )*/
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

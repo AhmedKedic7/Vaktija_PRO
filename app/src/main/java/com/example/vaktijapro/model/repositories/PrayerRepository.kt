@@ -15,4 +15,7 @@ class PrayerRepository (private val prayerDao :PrayerDao){
     fun getLastFivePrayers(userId: Int): Flow<List<Prayer>> {
         return prayerDao.getLastFivePrayers(userId)
     }
+    suspend fun deletePrayerById(prayerId: Int) {
+        prayerDao.deletePrayerById(prayerId)
+    }
 }

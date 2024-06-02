@@ -28,6 +28,14 @@ object AppViewModelProvider {
             )
         }
     }
+    val cityFactory = viewModelFactory {
+        initializer {
+            CityViewModel(
+                userApplication().container.userRepository,
+                userApplication().container.cityRepository
+            )
+        }
+    }
 }
 
 fun CreationExtras.userApplication(): VaktijaApplication = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]) as VaktijaApplication

@@ -9,6 +9,9 @@ class UserRepository(private val userDao: UserDao): BaseRepository<User> {
     override suspend fun update(t: User) = userDao.update(t)
     override suspend fun delete(t: User) = userDao.delete(t)
     fun getUserEmail(email: String): Flow<User> = userDao.getUserEmail(email)
+    /*suspend fun updateSelectedCity(userId: Int, cityId: Int) {
+        userDao.updateSelectedCity(userId, cityId)
+    }*/
     fun getUsersOrderedByUsername(): Flow<List<User>> = userDao.getUsersOrderedByUsername()
     fun getUsersOrderedByEmail(): Flow<List<User>> = userDao.getUsersOrderedByUsername()
 }
