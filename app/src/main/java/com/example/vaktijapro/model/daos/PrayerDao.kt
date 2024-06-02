@@ -16,4 +16,6 @@ interface PrayerDao {
     @Query("SELECT * FROM prayers WHERE user_id = :userId ORDER BY prayer_id DESC LIMIT 5")
     fun getLastFivePrayers(userId: Int): Flow<List<Prayer>>
 
+    @Query("DELETE FROM prayers WHERE prayer_id = :prayerId")
+    suspend fun deletePrayerById(prayerId: Int)
 }

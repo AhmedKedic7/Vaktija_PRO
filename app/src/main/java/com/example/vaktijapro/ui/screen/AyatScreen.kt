@@ -46,7 +46,7 @@ fun AyatScreen(
     userId:Int,
     viewModel: AyatViewModel= viewModel(factory=AppViewModelProvider.ayatFactory),
     navigateToAyatScreen: () -> Unit,
-    navigateToPrayers: () -> Unit,
+    navigateToPrayers: (Int) -> Unit,
     navigateToTutorial: (Int) -> Unit
 ){
 
@@ -75,15 +75,17 @@ fun AyatScreen(
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
+                    textAlign= TextAlign.Center
                 )
                 Text(
                     text = ayat.ayat,
                     fontSize = 32.sp,
                     color = Color.White,
-                    modifier = Modifier.padding(24.dp),
+                    modifier = Modifier.padding(24.dp)
+                        .width(320.dp),
 
-                    textAlign= TextAlign.End
+                    textAlign= TextAlign.Center
                 )
 
             } ?: Text(
@@ -93,12 +95,12 @@ fun AyatScreen(
                 color = Color.White,
                 modifier = Modifier.padding(16.dp)
             )
-            
+
             Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
-            
+
             Button(
                 onClick = { navigateToAyatScreen() },
-                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 modifier = Modifier.width(300.dp)) {
                 Text(text = "Generate new Ayat",
                     fontSize = 20.sp,
@@ -110,7 +112,7 @@ fun AyatScreen(
             Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
 
             Button(
-                onClick = { navigateToPrayers() },
+                onClick = { navigateToPrayers(userId) },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 modifier = Modifier.width(300.dp)
             ) {

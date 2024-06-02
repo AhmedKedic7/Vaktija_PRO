@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.text.style.ClickableSpan
+import android.util.Log
+import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,16 +21,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,9 +49,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
 import com.example.vaktijapro.R
 import com.example.vaktijapro.ui.screen.navigation.NavigationDestination
 import com.example.vaktijapro.ui.theme.VaktijaPROTheme
+import com.example.vaktijapro.viewModel.AppViewModelProvider
+import com.example.vaktijapro.viewModel.CityViewModel
 import kotlinx.coroutines.delay
 import java.lang.String.format
 import java.time.Instant
@@ -60,7 +74,7 @@ val MAGHRIB = "20:15"
 val ISHA = "22:07"
 
 
-object PrayersDestination: NavigationDestination {
+object PrayersDestination : NavigationDestination {
     override val route: String = "prayers"
     override val title: String = "Prayers"
 }
@@ -68,18 +82,39 @@ object PrayersDestination: NavigationDestination {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Prayers(
-    navigateToCities: () -> Unit,
-    navigateToAyatScreen: () -> Unit
-)  {
-    val CURRENT_PRAYER = remember { mutableStateOf("") }
-    var expanded = false
+    userId: Int,
 
-    Surface(
-        modifier = Modifier
-            .fillMaxSize(),
-        color = Color(backgroundColor),
-    ) {
-        Column() {
+    viewModel: CityViewModel = viewModel(factory = AppViewModelProvider.cityFactory),
+    navigateToCities: () -> Unit,
+    navigateToAyatScreen: (Int) -> Unit
+) {
+
+    var showDialog by remember { mutableStateOf(false) }
+    var selectedCityId by remember { mutableStateOf(1) }  // Default selected city ID
+
+    // Map of city IDs to city names
+    val cityMap = mapOf(
+        1 to "Sarajevo",
+        2 to "Banja Luka",
+        3 to "Tuzla",
+        4 to "Zenica",
+        5 to "Mostar",
+        6 to "Doboj",
+        7 to "Bihac",
+        8 to "Prijedor",
+        9 to "Travnik",
+        10 to "Brcko"
+
+    )
+    LaunchedEffect(selectedCityId) {
+        viewModel.loadSelectedCity(selectedCityId)
+    }
+
+    val selectedCity by viewModel.selectedCity.collectAsState()
+
+
+    Surface(modifier = Modifier.fillMaxSize()) {
+        Column {
             Row(
                 modifier = Modifier
                     .shadow(elevation = 8.dp)
@@ -90,7 +125,7 @@ fun Prayers(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(
-                    onClick = { navigateToAyatScreen() },
+                    onClick = { navigateToAyatScreen(userId) },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.White)
                 ) {
                     Icon(
@@ -104,32 +139,69 @@ fun Prayers(
                 Text(
                     modifier = Modifier.padding(32.dp, 0.dp),
                     fontSize = 20.sp,
-                    text = "Some City",
+                    text = selectedCity?.cityName ?: "Some City",
                     color = Color.Gray
                 )
-                Button(
-                    onClick = { navigateToCities() },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
-                ) {
+
+                IconButton(onClick = { showDialog = true }) {
                     Icon(
                         painter = painterResource(id = R.drawable.kebab_menu),
-                        contentDescription = "left arrow",
+                        contentDescription = "menu",
                         modifier = Modifier.size(20.dp),
                         tint = Color.Gray
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.size(width = 0.dp, height = 10.dp))
-            PrayerCard(time = DAWN, prayerName = "DAWN")
-            PrayerCard(time = SUNRISE, prayerName = "SUNRISE")
-            PrayerCard(time = DHUHR, prayerName = "DHUHR")
-            PrayerCard(time = ASR, prayerName = "ASR")
-            PrayerCard(time = MAGHRIB, prayerName = "MAGHRIB")
-            PrayerCard(time = ISHA, prayerName = "ISHA")
+            Spacer(modifier = Modifier.height(10.dp))
 
+            selectedCity?.let { city ->
+                PrayerCard(time = city.dawnTime, prayerName = "DAWN")
+                PrayerCard(time = city.sunriseTime, prayerName = "SUNRISE")
+                PrayerCard(time = city.dhuhrTime, prayerName = "DHUHR")
+                PrayerCard(time = city.asrTime, prayerName = "ASR")
+                PrayerCard(time = city.maghribTime, prayerName = "MAGHRIB")
+                PrayerCard(time = city.ishaTime, prayerName = "ISHA")
+            }
+            if (showDialog) {
+                CitySelectionDialog(
+                    cityMap = cityMap,
+                    onDismiss = { showDialog = false },
+                    onCitySelected = { id ->
+                        selectedCityId = id
+                        showDialog = false
+                    }
+                )
+            }
         }
     }
+}
+@Composable
+fun CitySelectionDialog(
+    cityMap: Map<Int, String>,
+    onDismiss: () -> Unit,
+    onCitySelected: (Int) -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = "Select a City") },
+        text = {
+            Column {
+                cityMap.forEach { (id, name) ->
+                    TextButton(
+                        onClick = { onCitySelected(id) }
+                    ) {
+                        Text(text = name)
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
 }
 
 @SuppressLint("SimpleDateFormat")
@@ -235,6 +307,6 @@ fun PrayerCard(time: String, prayerName: String) {
 @Composable
 fun PrayersPreview(){
     VaktijaPROTheme {
-        Prayers(navigateToCities = { }, navigateToAyatScreen = { } );
+        //Prayers(navigateToCities = { }, navigateToAyatScreen = { } );
     }
 }

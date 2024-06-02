@@ -28,4 +28,5 @@ interface UserDao {
     fun getUsersOrderedByUsername(): Flow<List<User>>
     @Query("SELECT * FROM users ORDER BY email ASC")
     fun getUsersOrderedByEmail(): Flow<List<User>>
+
 }

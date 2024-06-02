@@ -30,6 +30,11 @@ class PrayerViewModel (private val prayerRepository: PrayerRepository):ViewModel
             prayerRepository.insertPrayer(prayer)
         }
     }
+    fun deletePrayerById(prayerId: Int) {
+        viewModelScope.launch {
+            prayerRepository.deletePrayerById(prayerId)
+        }
+    }
 
 
 }
